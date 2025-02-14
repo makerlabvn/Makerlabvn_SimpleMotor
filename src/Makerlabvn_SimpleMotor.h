@@ -143,16 +143,16 @@ private:
   int calculate(int speed)
   {
     speed = constrain(speed, 0, 100);
-    // Chuyển đổi giá trị tốc độ (%) sang (PWM)
-    speed = map(speed, 0, 100, 0, 255);
+        // Chuyển đổi giá trị tốc độ (%) sang (PWM)
+        speed = map(speed, 0, 100, 0, 255);
     return speed;
   }
 
 public:
-  void begin(Motor_lib *motorA, Motor_lib *motorB)
+  void begin(Motor_lib &motorA, Motor_lib &motorB)
   {
-    _motorA = motorA;
-    _motorB = motorB;
+    _motorA = &motorA;
+    _motorB = &motorB;
   }
 
   void car_fw(int speedA, int speedB) override
