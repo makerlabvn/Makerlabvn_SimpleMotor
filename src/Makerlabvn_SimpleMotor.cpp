@@ -1,3 +1,4 @@
+#include "Arduino.h"
 /* ------------------------------------------------------------------------- */
 /*                                  LIBRARY                                  */
 /* ------------------------------------------------------------------------- */
@@ -7,7 +8,7 @@
 /* ------------------------------------------------------------------------- */
 /*                                  HÀM TẠO                                  */
 /* ------------------------------------------------------------------------- */
-
+Makerlabvn_SimpleMotor::Makerlabvn_SimpleMotor() {}
 Makerlabvn_SimpleMotor::Makerlabvn_SimpleMotor(
     int pinIn1, int pinIn2,
     int pinIn3, int pinIn4)
@@ -225,3 +226,152 @@ int Makerlabvn_SimpleMotor::calculate_speed(int speed)
 }
 
 /* ------------------------------------------------------------------------- */
+
+Makerlabvn_SimpleMotorSixPins::Makerlabvn_SimpleMotorSixPins() {}
+
+void Makerlabvn_SimpleMotorSixPins::setup(int pinIN1,
+                                          int pinIN2,
+                                          int pinIN3,
+                                          int pinIN4,
+                                          int pinENA,
+                                          int pinENB)
+{
+  _pinIn1 = pinIN1;
+  _pinIn2 = pinIN2;
+  _pinIn3 = pinIN3;
+  _pinIn4 = pinIN4;
+  _pinENA = pinENA;
+  _pinENB = pinENB;
+
+  pinMode(_pinIn1, OUTPUT);
+  pinMode(_pinIn2, OUTPUT);
+  pinMode(_pinIn3, OUTPUT);
+  pinMode(_pinIn4, OUTPUT);
+  pinMode(_pinENA, OUTPUT);
+  pinMode(_pinENB, OUTPUT);
+}
+
+void Makerlabvn_SimpleMotorSixPins::motorA_fw(int speed)
+{
+  int _speed = calculate_speed(speed);
+  digitalWrite(_pinIn1, HIGH);
+  digitalWrite(_pinIn2, LOW);
+  analogWrite(_pinENA, _speed);
+}
+void Makerlabvn_SimpleMotorSixPins::motorA_bw(int speed)
+{
+  int _speed = calculate_speed(speed);
+  digitalWrite(_pinIn1, LOW);
+  digitalWrite(_pinIn2, HIGH);
+  analogWrite(_pinENA, _speed);
+}
+void Makerlabvn_SimpleMotorSixPins::motorB_fw(int speed)
+{
+  int _speed = calculate_speed(speed);
+  digitalWrite(_pinIn3, HIGH);
+  digitalWrite(_pinIn4, LOW);
+  analogWrite(_pinENB, _speed);
+}
+void Makerlabvn_SimpleMotorSixPins::motorB_bw(int speed)
+{
+  int _speed = calculate_speed(speed);
+  digitalWrite(_pinIn3, LOW);
+  digitalWrite(_pinIn4, HIGH);
+  analogWrite(_pinENB, _speed);
+}
+
+void Makerlabvn_SimpleMotorSixPins::motorA_stop()
+{
+  digitalWrite(_pinIn1, LOW);
+  digitalWrite(_pinIn2, LOW);
+  analogWrite(_pinENA, 0);
+} // Điều khiển motor kênh A dừng lại
+void Makerlabvn_SimpleMotorSixPins::motorB_stop()
+{
+  digitalWrite(_pinIn3, LOW);
+  digitalWrite(_pinIn4, LOW);
+  analogWrite(_pinENB, 0);
+} // Điều khiển motor kênh B dừng lại
+
+void Makerlabvn_SimpleMotorSixPins::car_fw(int speedA, int speedB)
+{
+  motorA_fw(speedA);
+  motorB_fw(speedB);
+} // Điều khiển xe đi tới
+void Makerlabvn_SimpleMotorSixPins::car_bw(int speedA, int speedB)
+{
+  motorA_bw(speedA);
+  motorB_bw(speedB);
+} // Điều khiển xe đi lùi
+void Makerlabvn_SimpleMotorSixPins::car_rotateL(int speed)
+{
+  motorA_bw(speed);
+  motorB_fw(speed);
+} // Điều khiển xe xoay trái
+void Makerlabvn_SimpleMotorSixPins::car_rotateR(int speed)
+{
+  motorA_fw(speed);
+  motorB_bw(speed);
+} // Điều khiển xe xoay phải
+
+void Makerlabvn_SimpleMotorSixPins::car_stop()
+{
+  motorA_stop();
+  motorB_stop();
+}
+
+int Makerlabvn_SimpleMotorSixPins::calculate_speed(int speed)
+{
+  speed = constrain(speed, 0, 100);
+
+  // Chuyển đổi giá trị tốc độ (%) sang (PWM)
+  speed = map(speed, 0, 100, 0, 255);
+
+  return speed;
+}
+
+void Motor_lib::begin(int pwm_, int in1_, int in2_){
+  this->in1 = in1_;
+  this->in2 = in2_;
+  this->pwm = pwm_;
+
+  pinMode(this->in1, OUTPUT);
+  pinMode(this->in2, OUTPUT);
+  pinMode(this->pwm, OUTPUT);
+
+}
+
+void Motor_lib::forward(int iSpeed){
+  digitalWrite(this->in1, 1);
+  digitalWrite(this->in2, 0);
+  analogWrite(this->pwm, iSpeed);
+  this->resetTimeRun();
+}
+
+void Motor_lib::backward(int iSpeed){
+  digitalWrite(this->in1, 0);
+  digitalWrite(this->in2, 1);
+  analogWrite(this->pwm, iSpeed);
+  this->resetTimeRun();
+}
+
+void Motor_lib::stop(){
+  digitalWrite(this->in1, 0);
+  digitalWrite(this->in2, 0);
+  analogWrite(this->pwm, 0);
+}
+
+void Motor_lib::setTimeRun(unsigned long ul_timerun_){
+  this->timeRun = ul_timerun_;
+}
+
+void Motor_lib::checkStop(){
+  if(this->timeRun == 0) return;
+  if(millis() - this->lastTime >= this->timeRun){
+      this->stop();
+  }
+}
+
+void Motor_lib::resetTimeRun(){
+  this->lastTime = millis();
+}
