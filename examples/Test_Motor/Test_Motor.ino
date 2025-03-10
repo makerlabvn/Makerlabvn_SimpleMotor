@@ -32,11 +32,20 @@
 #define PIN_IN3 6 //! D6 (~)
 #define PIN_IN4 7 //! D7
 
+// #define PIN_ENA 5    //! (~)
+// #define PIN_IN1 7
+// #define PIN_IN2 4
+// #define PIN_IN3 9
+// #define PIN_IN4 8
+// #define PIN_ENB 6    //! (~)
+
 /* ------------------------------------------------------------------------- */
 /*                                   OBJECT                                  */
 /* ------------------------------------------------------------------------- */
 
 Makerlabvn_SimpleMotor demo(PIN_IN1, PIN_IN2, PIN_IN3, PIN_IN4);
+// Makerlabvn_SimpleMotor demo(PIN_ENA, PIN_IN1, PIN_IN2, PIN_IN3, PIN_IN4, PIN_ENB);
+// Makerlabvn_SimpleMotor demo(0x64); // I2C Motor Driver
 
 /* ------------------------------------------------------------------------- */
 /*                                RUN ONE TIME                               */
