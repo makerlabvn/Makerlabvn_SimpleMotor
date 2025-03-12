@@ -1,5 +1,6 @@
 /**
  * Kiểm tra điều khiển xe kết hợp 2 kênh A và B
+ * https://hshop.vn/mach-dieu-khien-dong-co-mkl-m10-i2c-motor-control-module
  */
 
 /* ------------------------------------------------------------------------- */
@@ -11,26 +12,6 @@
 /* ------------------------------------------------------------------------- */
 /*                                   DEFINE                                  */
 /* ------------------------------------------------------------------------- */
-
-/**
- * Phần cấp nguồn cho Driver
- * +12V - ... có thể cấp nguồn trong khoảng 9V~6V
- * GND  - GND
- *
- * Dùng Jumper kết nối (mặc định)
- * ENA  - 5V
- * ENB  - 5V
- *
- * L298 : Arduino
- * IN1  : D4
- * IN2  : D5 (~)
- * IN3  : D6 (~)
- * IN4  : D7
- */
-#define PIN_IN1 4 //! D4
-#define PIN_IN2 5 //! D5 (~)
-#define PIN_IN3 6 //! D6 (~)
-#define PIN_IN4 7 //! D7
 
 /* ------------------------------------------------------------------------- */
 /*                                   OBJECT                                  */
@@ -45,7 +26,10 @@ Makerlabvn_SimpleMotor demo;
 void setup()
 {
   Serial.begin(115200);
-  demo.setup(PIN_IN1, PIN_IN2, PIN_IN3, PIN_IN4);
+  Serial.println("Start");
+
+  demo.setup(0x40);
+
 }
 
 /* ------------------------------------------------------------------------- */
@@ -88,12 +72,12 @@ void loop()
 
   /* ----------------------------------------------------------------------- */
 
-  Serial.println("Xoay trái tốc độ 50%.");
-  demo.car_rotateL(50);
+  Serial.println("Xoay trái tốc độ 10%.");
+  demo.car_rotateL(30);
   delay(5000);
 
   Serial.println("Xoay phải tốc độ 50%.");
-  demo.car_rotateR(50);
+  demo.car_rotateR(20);
   delay(5000);
 
   /* ----------------------------------------------------------------------- */

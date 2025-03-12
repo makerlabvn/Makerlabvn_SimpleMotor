@@ -42,18 +42,32 @@ private:
   Makerlabvn_I2C_Motor_Driver *i2cMotorDriver;
 public:
   /* ------------------------------- HÀM TẠO ------------------------------- */
+  Makerlabvn_SimpleMotor(){}
+  
   Makerlabvn_SimpleMotor(
-      int pinIn1, int pinIn2,
-      int pinIn3, int pinIn4
+      uint8_t pinIn1, uint8_t pinIn2,
+      uint8_t pinIn3, uint8_t pinIn4
   );
 
   Makerlabvn_SimpleMotor(
-      int pinEnA, int pinIn1, int pinIn2,
-      int pinIn3, int pinIn4, int pinEnB
+      uint8_t pinEnA, uint8_t pinIn1, uint8_t pinIn2,
+      uint8_t pinIn3, uint8_t pinIn4, uint8_t pinEnB
   );
 
   Makerlabvn_SimpleMotor(
     uint8_t paI2cAddress
+  );
+
+  void setup(uint8_t paAddress);
+
+  void setup(
+    uint8_t pinIn1, uint8_t pinIn2,
+    uint8_t pinIn3, uint8_t pinIn4
+  );
+  
+  void setup(
+    uint8_t pinEnA, uint8_t pinIn1, uint8_t pinIn2,
+    uint8_t pinIn3, uint8_t pinIn4, uint8_t pinEnB
   );
 
   /* ------------------------- HÀM ĐIỀU KHIỂN MOTOR ------------------------ */
@@ -83,12 +97,12 @@ public:
 
 private:
   /* ----------------------- (BIẾN) CẤU HÌNH CÁC PIN ----------------------- */
-  int _pinIn1;
-  int _pinIn2;
-  int _pinIn3;
-  int _pinIn4;
-  int _pinEnA;
-  int _pinEnB;
+  uint8_t _pinIn1;
+  uint8_t _pinIn2;
+  uint8_t _pinIn3;
+  uint8_t _pinIn4;
+  uint8_t _pinEnA;
+  uint8_t _pinEnB;
 
   /* --------------------------- (HÀM) ĐẶT TỐC ĐỘ -------------------------- */
 

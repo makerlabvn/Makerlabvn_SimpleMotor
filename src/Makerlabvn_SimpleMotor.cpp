@@ -13,14 +13,37 @@ Makerlabvn_SimpleMotor::Makerlabvn_SimpleMotor(
 )
 {
   this->type = Makerlabvn_SimpleMotor_Type_I2C;
-  i2cMotorDriver = new Makerlabvn_I2C_Motor_Driver(paI2cAddress);
-  i2cMotorDriver->begin();
 
 }
 
 Makerlabvn_SimpleMotor::Makerlabvn_SimpleMotor(
-    int pinIn1, int pinIn2,
-    int pinIn3, int pinIn4)
+    uint8_t pinIn1, uint8_t pinIn2,
+    uint8_t pinIn3, uint8_t pinIn4)
+{
+  setup(pinIn1, pinIn2, pinIn3, pinIn4);
+}
+
+Makerlabvn_SimpleMotor::Makerlabvn_SimpleMotor(
+      uint8_t pinEnA, uint8_t pinIn1, uint8_t pinIn2,
+      uint8_t pinIn3, uint8_t pinIn4, uint8_t pinEnB)
+{
+  setup(pinEnA, pinIn1, pinIn2, pinIn3, pinIn4, pinEnB);
+}
+
+void Makerlabvn_SimpleMotor::setup(uint8_t paI2cAddress)
+{
+  this->type = Makerlabvn_SimpleMotor_Type_I2C;
+  if(i2cMotorDriver != NULL){
+    delete i2cMotorDriver;
+  }
+  i2cMotorDriver = new Makerlabvn_I2C_Motor_Driver(paI2cAddress);
+  i2cMotorDriver->begin();
+}
+
+void Makerlabvn_SimpleMotor::setup(
+  uint8_t pinIn1, uint8_t pinIn2,
+  uint8_t pinIn3, uint8_t pinIn4
+)
 {
   this->type = Makerlabvn_SimpleMotor_Type_L298_4Pin;
   _pinIn1 = pinIn1;
@@ -38,10 +61,12 @@ Makerlabvn_SimpleMotor::Makerlabvn_SimpleMotor(
   digitalWrite(_pinIn3, LOW);
   digitalWrite(_pinIn4, LOW);
 }
-
-Makerlabvn_SimpleMotor::Makerlabvn_SimpleMotor(
-      int pinEnA, int pinIn1, int pinIn2,
-      int pinIn3, int pinIn4, int pinEnB){
+  
+void Makerlabvn_SimpleMotor::setup(
+  uint8_t pinEnA, uint8_t pinIn1, uint8_t pinIn2,
+  uint8_t pinIn3, uint8_t pinIn4, uint8_t pinEnB
+)
+{
   this->type = Makerlabvn_SimpleMotor_Type_L298_6Pin;
   _pinIn1 = pinIn1;
   _pinIn2 = pinIn2; // ~PWM
@@ -60,7 +85,6 @@ Makerlabvn_SimpleMotor::Makerlabvn_SimpleMotor(
   digitalWrite(_pinIn3, LOW);
   digitalWrite(_pinIn4, LOW);
 }
-  
 
 /* ------------------------------------------------------------------------- */
 /*                            HÀM ĐIỀU KHIỂN MOTOR                           */
